@@ -54,7 +54,7 @@ public class NBody{
                 p[i].draw();
             }
 			StdDraw.show();
-			StdDraw.pause(20);
+			StdDraw.pause(10);
             t += dt;
         }
         StdOut.printf("%d\n", p.length);

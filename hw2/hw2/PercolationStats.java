@@ -3,32 +3,39 @@ import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
-    double[] X;
-    public PercolationStats(int N, int T, PercolationFactory pf) {   // perform T independent experiments on an N-by-N grid
+    private double[] X;
+    int T;
+    public PercolationStats(int N, int T, PercolationFactory pf) {
+        // perform T independent experiments on an N-by-N grid
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException("arguments error");
         }
 
-        Percolation examp = pf.make(N);
         X = new double[T];
+        this.T = T;
 
         for (int i = 0; i < T; i++) {
-            examp.open(StdRandom.uniform(0, N), StdRandom.uniform(0, N));
-            X[i] = examp.numberOfOpenSites() / N * N;
+            Percolation examp = pf.make(N);
+                do {
+                    int x = StdRandom.uniform(N);
+                    int y = StdRandom.uniform(N);
+                    examp.open(x, y);
+                } while (!examp.percolates());
+            X[i] = (double) examp.numberOfOpenSites() / (N * N);
         }
-
     }
-    public double mean() {                                           // sample mean of percolation threshold
+    public double mean() {
+        // sample mean of percolation threshold
         return StdStats.mean(X);
     }
     public double stddev() {
         return StdStats.stddev(X);
-    }                                         // sample standard deviation of percolation threshold
+    }
     public double confidenceLow() {
-        return mean() - 1.96 * Math.sqrt(stddev()) / Math.sqrt(X.length);
-    }                                  // low endpoint of 95% confidence interval
+        return mean() - 1.96 * Math.sqrt(stddev()) / Math.sqrt(T);
+    }
     public double confidenceHigh() {
-        return mean() - 1.96 * Math.sqrt(stddev()) / Math.sqrt(X.length);
-    }                                 // high endpoint of 95% confidence interval
+        return mean() - 1.96 * Math.sqrt(stddev()) / Math.sqrt(T);
+    }
 
 }

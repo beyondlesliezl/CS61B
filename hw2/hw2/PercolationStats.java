@@ -4,7 +4,7 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
     private double[] X;
-    int T;
+    private int T;
     public PercolationStats(int N, int T, PercolationFactory pf) {
         // perform T independent experiments on an N-by-N grid
         if (N <= 0 || T <= 0) {
